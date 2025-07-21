@@ -1,111 +1,198 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dark Zone Gaming</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family:'Orbitron',sans-serif;
-      background:linear-gradient(135deg,#0f0f0f,#1a1a1a);
-      color:white; overflow-x:hidden;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f0f;
+      color: #fff;
+      overflow-x: hidden;
     }
-    .glitch-title {
-      font-size:3rem; text-align:center; margin-top:2rem;
-      position:relative; color:#00fff7;
-      animation:float 3s ease-in-out infinite;
+    .loader {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
     }
-    .glitch-title::before,
-    .glitch-title::after {
-      content:'Dark Zone Gaming'; position:absolute;
-      top:0; left:0; width:100%; overflow:hidden;
-      color:#ff004f; clip:rect(0,900px,0,0);
-      animation:glitch 2s infinite linear alternate-reverse;
+    .loader h1 {
+      font-size: 3rem;
+      color: #fff;
+      animation: glitch 1s infinite;
     }
-    .glitch-title::after {
-      color:#00fff7; clip:rect(0,0,0,0);
-      animation-delay:0.5s;
+    header {
+      text-align: center;
+      padding: 2rem;
+      animation: glitch 1s infinite;
     }
-    @keyframes glitch {
-      0%{clip:rect(0,9999px,0,0);}  
-      5%{clip:rect(5px,9999px,15px,0);}  
-      10%{clip:rect(15px,9999px,25px,0);}  
-      15%{clip:rect(25px,9999px,35px,0);}  
-      20%{clip:rect(0,9999px,0,0);}  
-      100%{clip:rect(0,9999px,0,0);}  
+    header img {
+      width: 100px;
+      border-radius: 50%;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
-    @keyframes float {
-      0%,100%{transform:translateY(0);}
-      50%{transform:translateY(-10px);}
+    header img:hover {
+      transform: rotate(10deg);
+      box-shadow: 0 0 20px #ff004c;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin: 1rem 0 0.5rem;
+    }
+    .subscribe {
+      margin: 1rem 0;
+    }
+    .subscribe a {
+      color: #fff;
+      text-decoration: none;
+      background: red;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
     }
     .video-container {
-      display:flex; justify-content:center;
-      align-items:center; margin:3rem auto;
-      max-width:100%; padding:0 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      padding: 2rem;
     }
-    iframe {
-      width:100%; max-width:600px;
-      aspect-ratio:16/9; border:none;
-      border-radius:10px; box-shadow:0 0 20px #00fff7;
+    .video {
+      background: #1a1a1a;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #000;
     }
-    canvas#bg {
-      position:fixed; top:0; left:0;
-      z-index:-1;
+    .video img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .about, .contact {
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .contact input, .contact textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      background: #333;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.8rem;
+      background: #111;
+    }
+    @keyframes glitch {
+      0% { text-shadow: 2px 2px #ff004c; }
+      25% { text-shadow: -2px -2px #00fff7; }
+      50% { text-shadow: 2px -2px #ff004c; }
+      75% { text-shadow: -2px 2px #00fff7; }
+      100% { text-shadow: 2px 2px #ff004c; }
     }
   </style>
 </head>
 <body>
-  <canvas id="bg"></canvas>
-  <h1 class="glitch-title">Dark Zone Gaming</h1>
-  <div class="video-container">
-    <iframe id="latest-video" allowfullscreen></iframe>
-  </div>
+  <div class="loader" id="loader">
+    <h1>Loading...</h1>
+  </div>  <header>
+    <img src="https://yt3.googleusercontent.com/ytc/AIdro_mttA0b0qXkKQti1uTVqlfUljA63IEgDXWy0jx_6A=s176-c-k-c0x00ffffff-no-rj" alt="Logo">
+    <h1>Dark Zone Gaming</h1>
+    <div class="subscribe">
+      <a href="https://www.youtube.com/@darkzonegaming3729?sub_confirmation=1" target="_blank">🔴 Subscribe on YouTube</a>
+    </div>
+  </header>  <section id="live-count" style="text-align:center; padding:2rem;">
+    <h2>🔴 Live Subscriber Count</h2>
+    <p id="subscriberCount" style="font-size:2rem;">Loading...</p>
+  </section>  <section class="video-container" id="videos">
+    <!-- YouTube videos will load here -->
+  </section>  <section style="text-align: center; margin: 2rem;">
+    <h2>🧍 Live Visitors On This Site</h2>
+    <script async src="//whos.amung.us/pingjs/?k=azmaldarkzone" data-cfasync="false"></script>
+    <script async src="//whos.amung.us/widget/kazmaldarkzone/visits.js" data-cfasync="false"></script>
+  </section>  <section class="about">
+    <h2>📝 My Journey — Barun Das</h2>
+    <p>
+      Hey everyone! I'm <strong>Barun Das</strong>, and I wear two hats proudly — a
+      devoted religious soul and a fearless gamer. In a world of chaos, I’ve always
+      found balance in my beliefs and adrenaline in my gameplay.
+    </p>
+    <p>
+      Growing up, my faith was my foundation. It gave me peace, purpose, and
+      perspective. But when the controller’s in my hand, it’s all about sharp reflexes,
+      tactical decisions, and powerful moments. Whether I’m raiding in Minecraft,
+      grinding in Blox Fruits, or exploring new games, I pour my full heart into it.
+    </p>
+    <p>
+      This dual path might seem opposite to some — but not to me. Being spiritual keeps
+      me grounded. Gaming lets me fly. When I’m not praying or learning, I’m online with
+      my squad, planning our next move or recording epic gameplay for <strong>Dark Zone
+      Gaming</strong>.
+    </p>
+    <p>
+      I created this platform — with the amazing help of my friend <strong>Azmal</strong>
+      — to show both sides of me. This isn't just a website. It's a bridge between faith
+      and firepower. A place where I share my latest videos, hear from fans, and
+      represent who I really am.
+    </p>
+    <p>
+      Thanks for stopping by. Whether you came here from YouTube or just stumbled in
+      from Google — welcome to my world. Let’s game with heart. Let’s stay humble. And
+      let’s grow — together.
+    </p>
+    <p style="text-align:right; font-style:italic;">— Barun Das 🎮🙏</p>
+  </section>  <section class="contact">
+    <h2>Message Me</h2>
+    <form action="https://formspree.io/f/mwkgqyzr" method="POST">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>  <footer>
+    Website created by Azmal • Instagram: <a href="https://instagram.com/_dark_zone_gaming_01" target="_blank">_dark_zone_gaming_01</a>
+  </footer>  <script>
+    window.addEventListener("load", () => {
+      document.getElementById("loader").style.display = "none";
+    });
 
-  <script>
-    const canvas = document.getElementById('bg');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; init(); }
-    window.addEventListener('resize', resize);
-    class P{ constructor(){
-        this.x=Math.random()*canvas.width;
-        this.y=Math.random()*canvas.height;
-        this.s=Math.random()*2+1;
-        this.dx=Math.random()*0.5-0.25;
-        this.dy=Math.random()*0.5-0.25;
-      }
-      update(){
-        this.x+=this.dx; this.y+=this.dy;
-        if(this.x<0||this.x>canvas.width) this.dx*=-1;
-        if(this.y<0||this.y>canvas.height) this.dy*=-1;
-      }
-      draw(){
-        ctx.beginPath();
-        ctx.arc(this.x,this.y,this.s,0,Math.PI*2);
-        ctx.fillStyle='#00fff7'; ctx.fill();
-      }
-    }
-    function init(){
-      particles=[];
-      for(let i=0;i<100;i++) particles.push(new P());
-    }
-    function anim(){
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      particles.forEach(p=>{p.update(); p.draw();});
-      requestAnimationFrame(anim);
-    }
-    resize(); anim();
+    const apiKey = "AIzaSyBqyNEuAOdaqggt5ljYJv2n4Tt9ELdpNpw";
+    const channelId = "UCyDWt1P3PKRipo7AcJUskcA";
 
-    async function loadLatest(){
-      const ch='UCyDWt1P3PKRipo7AcJUskcA';
-      const res=await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${ch}`);
-      const xml=new DOMParser().parseFromString(await res.text(),"text/xml");
-      const vid=xml.getElementsByTagName('yt:videoId')[0].textContent;
-      document.getElementById('latest-video').src=`https://www.youtube.com/embed/${vid}`;
+    async function updateSubscriberCount() {
+      const response = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${channelId}&key=${apiKey}`);
+      const data = await response.json();
+      const count = data.items[0].statistics.subscriberCount;
+      document.getElementById("subscriberCount").innerText = count.toLocaleString() + " subscribers";
     }
-    loadLatest();
-  </script>
-</body>
+
+    updateSubscriberCount();
+    setInterval(updateSubscriberCount, 30000);
+
+    fetch(`https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=5`)
+      .then(response => response.json())
+      .then(data => {
+        const videoSection = document.getElementById("videos");
+        data.items.forEach(item => {
+          if (item.id.kind === "youtube#video") {
+            const video = document.createElement("div");
+            video.classList.add("video");
+            video.innerHTML = `
+              <a href="https://www.youtube.com/watch?v=${item.id.videoId}" target="_blank">
+                <img src="${item.snippet.thumbnails.medium.url}" alt="${item.snippet.title}" />
+                <p>${item.snippet.title}</p>
+              </a>
+            `;
+            videoSection.appendChild(video);
+          }
+        });
+      });
+  </script></body>
 </html>
