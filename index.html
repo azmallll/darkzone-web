@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dark Zone Gaming</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:'Orbitron',sans-serif;
+      background:linear-gradient(135deg,#0f0f0f,#1a1a1a);
+      color:white; overflow-x:hidden;
+    }
+    .glitch-title {
+      font-size:3rem; text-align:center; margin-top:2rem;
+      position:relative; color:#00fff7;
+      animation:float 3s ease-in-out infinite;
+    }
+    .glitch-title::before,
+    .glitch-title::after {
+      content:'Dark Zone Gaming'; position:absolute;
+      top:0; left:0; width:100%; overflow:hidden;
+      color:#ff004f; clip:rect(0,900px,0,0);
+      animation:glitch 2s infinite linear alternate-reverse;
+    }
+    .glitch-title::after {
+      color:#00fff7; clip:rect(0,0,0,0);
+      animation-delay:0.5s;
+    }
+    @keyframes glitch {
+      0%{clip:rect(0,9999px,0,0);}  
+      5%{clip:rect(5px,9999px,15px,0);}  
+      10%{clip:rect(15px,9999px,25px,0);}  
+      15%{clip:rect(25px,9999px,35px,0);}  
+      20%{clip:rect(0,9999px,0,0);}  
+      100%{clip:rect(0,9999px,0,0);}  
+    }
+    @keyframes float {
+      0%,100%{transform:translateY(0);}
+      50%{transform:translateY(-10px);}
+    }
+    .video-container {
+      display:flex; justify-content:center;
+      align-items:center; margin:3rem auto;
+      max-width:100%; padding:0 1rem;
+    }
+    iframe {
+      width:100%; max-width:600px;
+      aspect-ratio:16/9; border:none;
+      border-radius:10px; box-shadow:0 0 20px #00fff7;
+    }
+    canvas#bg {
+      position:fixed; top:0; left:0;
+      z-index:-1;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+  <h1 class="glitch-title">Dark Zone Gaming</h1>
+  <div class="video-container">
+    <iframe id="latest-video" allowfullscreen></iframe>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; init(); }
+    window.addEventListener('resize', resize);
+    class P{ constructor(){
+        this.x=Math.random()*canvas.width;
+        this.y=Math.random()*canvas.height;
+        this.s=Math.random()*2+1;
+        this.dx=Math.random()*0.5-0.25;
+        this.dy=Math.random()*0.5-0.25;
+      }
+      update(){
+        this.x+=this.dx; this.y+=this.dy;
+        if(this.x<0||this.x>canvas.width) this.dx*=-1;
+        if(this.y<0||this.y>canvas.height) this.dy*=-1;
+      }
+      draw(){
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.s,0,Math.PI*2);
+        ctx.fillStyle='#00fff7'; ctx.fill();
+      }
+    }
+    function init(){
+      particles=[];
+      for(let i=0;i<100;i++) particles.push(new P());
+    }
+    function anim(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      particles.forEach(p=>{p.update(); p.draw();});
+      requestAnimationFrame(anim);
+    }
+    resize(); anim();
+
+    async function loadLatest(){
+      const ch='UCyDWt1P3PKRipo7AcJUskcA';
+      const res=await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${ch}`);
+      const xml=new DOMParser().parseFromString(await res.text(),"text/xml");
+      const vid=xml.getElementsByTagName('yt:videoId')[0].textContent;
+      document.getElementById('latest-video').src=`https://www.youtube.com/embed/${vid}`;
+    }
+    loadLatest();
+  </script>
+</body>
+</html>
